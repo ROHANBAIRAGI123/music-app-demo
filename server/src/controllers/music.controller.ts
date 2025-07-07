@@ -3,6 +3,7 @@ import asyncHandler from "../utils/asyncHandler";
 import ApiError from "../utils/ApiError";
 import Music from "../models/music.model";
 import ApiResponse from "../utils/ApiResponse";
+// import { uploadOnCloudinary } from "../utils/claudinary";
 
 const uploadMusic = asyncHandler(async (req: Request, res: Response) => {
   console.log("request recieved");
@@ -10,17 +11,30 @@ const uploadMusic = asyncHandler(async (req: Request, res: Response) => {
   if (!title || !artist) {
     throw new ApiError(400, "Title and artist are required");
   }
+
+  const file = req.file as Express.Multer.File;
+  console.log(file);
+
+  // const fileLocalPath = file.path;
+
+  // if (!fileLocalPath) {
+  //   throw new ApiError(400, "File not found");
+  // }
+
+  // const musicFile = await uploadOnCloudinary(fileLocalPath);
+
   const newMusic = new Music({
     title,
     artist,
     album,
     mood,
     theme,
+    // filePath: musicFile?.url,
     instrument,
   });
 
   const music = await newMusic.save();
-
+  console.log(music);
   res
     .status(201)
     .json(new ApiResponse(201, "Music uploaded successfully", music));

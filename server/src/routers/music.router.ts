@@ -10,6 +10,9 @@ const router = Router();
 
 router.route("/").get(getAllMusic);
 router.route("/:title").get(getMusicByTitle);
-router.route("/upload").post(upload.fields([{ name: "file" }]), uploadMusic);
+console.log("multer middleware loaded", upload);
+router
+  .route("/upload")
+  .post(upload.fields([{ name: "musicFile" }]), uploadMusic);
 
 export default router;
